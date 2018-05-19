@@ -1,0 +1,291 @@
+\documentclass[serbian]{beamer}
+
+\usepackage{babel}
+\mode<presentation>
+{
+  \usetheme{default}      % or try Boadilla, Rochester, ...
+  \usecolortheme{default} % or try beaver, dove, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+} 
+
+% This is for slide numbering
+\setbeamertemplate{sidebar right}{}
+\setbeamertemplate{footline}{%
+	\hfill\usebeamertemplate***{navigation symbols}
+	\large\insertframenumber{}/\inserttotalframenumber\hspace{0.5cm}\vspace{0.2cm}
+}
+
+\usepackage{listings}
+\lstset{
+	basicstyle=\ttfamily\small,
+	columns=fullflexible,
+	keepspaces=true,
+	showstringspaces=false,
+	escapechar=\%,
+	tabsize=4
+}
+
+\usepackage{amsmath}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
+\title[BFGS]{BFGS}
+\author{Nikola Ajzenhamer}
+\institute{Matemati\v cki fakultet, \\ Univerzitet u Beogradu}
+\date{\today.}
+
+\begin{document}
+
+\begin{frame}
+  	\titlepage
+\end{frame}
+
+\begin{frame}{Sadr\v zaj}
+  	\tableofcontents
+\end{frame}
+
+\section{Uvod}
+
+\begin{frame}{Uvod}
+
+\begin{itemize}
+	\item Broyden-Fletcher-Goldfarb-Shanno
+	\item Jedan od Kvazi-Njutnovih metoda:
+	\begin{itemize}
+		\item Zahtevaju gradijent ciljne funkcije pri svakoj iteraciji
+		\item Konstrui\v su model ciljne funkcije \\
+		koji je dovoljno dobar da daje superlinearnu konvergenciju
+		\item S obzirom da ne zahtevaju izvode drugog reda, \\
+		ponekad su br\v zi od Njutnovih metoda
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\section{BFGS metod}
+
+\begin{frame}{BFGS metod}
+
+\begin{itemize}
+	\item Model ciljne funkcije:
+	\begin{equation}\label{for:model ciljne funkcije}
+		m_k(p) = f_k + \nabla f_k^Tp + \dfrac{1}{2} p^T B_k p
+	\end{equation}
+
+	\item $B_k$ je:
+	\begin{itemize}
+		\item Dimetri\v cna pozitivno definitna matrica dimenzija $n \times n$
+		\item A\v zurira se pri svakoj iteraciji
+		\item Predstavlja aproksimaciju Hesijana
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{BFGS metod (2)}
+
+\begin{itemize}
+	\item Minimizator modela \ref{for:model ciljne funkcije}:
+	\begin{equation}\label{for:pravac pretrage}
+		p_k = -B_k^{-1} \nabla f_k
+	\end{equation}
+	
+	\item Koristi se kao pravac pretrage:
+	\begin{equation*}
+		x_{k+1} = x_k + \alpha_k p_k
+	\end{equation*}
+	
+	\item Kasnije \'cemo razmotriti odre\dj ivanje koraka $\alpha_k$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{BFGS metod (3)}
+
+\begin{itemize}
+	\item Mo\v ze se izvesti naredna formula \\
+	koja se koristi za izra\v cunavanje naredne aproksimacije $B_{k+1}^{-1}$ \\
+	ukoliko je poznata prethodna aproksimacija $B_k^{-1}$:
+	\begin{equation}\label{for:BFGS formula}
+		B_{k+1}^{-1} = (I - \rho_k s_k y_k^T)B_k^{-1}(I - \rho_k y_k s_k^T) + \rho_k s_k s_k^T
+	\end{equation}
+	gde va\v zi
+	\begin{equation*}
+		s_k = x_{k+1} - x_k, \quad y_k = \nabla f_{k+1} - \nabla f_k, \quad \rho_k = \dfrac{1}{y_k^T s_k}
+	\end{equation*}
+	
+	\item Za po\v cetnu aproksimaciju mo\v ze se uzeti $B_0^{-1} = I$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Odre\dj ivanje koraka $\alpha_k$}
+
+\begin{itemize}
+	\item Odre\dj ivanje $\alpha_k$ se vr\v si tako da zadovoljava Wolfe uslove:
+	\begin{equation}\label{for:Wolfe uslovi}
+	\begin{aligned}
+		f(x_k + \alpha_k p_k) &\leq f(x_k) + c_1 \alpha_k \nabla f_k^T p_k \\
+		\nabla f(x_k + \alpha_k p_k)^T p_k &\geq c_2 \nabla f_k^T p_k 
+	\end{aligned}
+	\end{equation}
+	gde va\v zi $0 < c_1 < c_2 < 1$.
+	
+	\item Prvi uslov govori da $\alpha_k$ treba da daje \emph{neophodan spust} \\ 
+	ciljne funkcije $f$ (\emph{Armijo condition})
+	
+	\item Drugi uslov elimini\v se premale korake (\emph{curvature condition})
+\end{itemize}
+
+\end{frame}
+
+\section{Algoritmi}
+
+\begin{frame}{Odre\dj ivanje koraka $\alpha_k$}
+
+\begin{itemize}
+	\item Algoritam linijske pretrage za odre\dj ivanje koraka \\
+	vr\v si se u dve faze:
+	\begin{enumerate}
+		\item Faza odsecanja -- pronalazi se interval koji sadr\v zi prihvatljive vrednosti
+		\item Faza selekcije -- pronalazi se finalni korak (algoritam \texttt{Zoom})
+	\end{enumerate}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Algoritam \texttt{Linijska\_pretraga}}
+
+\begin{itemize}
+	\item Ulaz: 
+	\begin{itemize}
+		\item Funkcija $\phi(\alpha) = f(x_k + \alpha p_k)$
+	\end{itemize}
+	\item Izlaz: 
+	\begin{itemize}
+		\item Parametar $\alpha^*$ koji zadovoljava Wolfe uslove \ref{for:Wolfe uslovi}
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Algoritam \texttt{Linijska\_pretraga}}
+
+\begin{lstlisting}
+Postavi %$\alpha_0 \gets 0$%, odaberi %$\alpha_1 > 0$% i %$\alpha_{max}$%;
+%$i \gets 1$%;
+repeat
+	Izra%\texttt{\v c}%unaj %$\phi(\alpha_i)$%;
+	if %$\phi(\alpha_i) > \phi(0) + c_1\alpha_i\phi'(\alpha_0)$% or [%$\phi(\alpha_i) \geq \phi(\alpha_{i-1})$% and %$i > 1$%]
+		Postavi %$\alpha^* \gets$% Zoom(%$\alpha_{i-1}, \alpha_i$%); Zaustavi;
+	Izra%\texttt{\v c}%unaj %$\phi'(\alpha_i)$%;
+	if %$|\phi'(\alpha_i)| \leq -c_2 \phi'(0)$%
+		Postavi %$\alpha^* \gets \alpha_i$%; Zaustavi;
+	if %$\phi'(\alpha_i) \geq 0$%
+		Postavi %$\alpha^* \gets$% Zoom(%$\alpha_i, \alpha_{i-1}$%); Zaustavi;
+	Izaberi %$\alpha_{i+1} \in (\alpha_i, \alpha_{max})$%;
+	%$i \gets i + 1$%;
+end (repeat)
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Algoritam \texttt{Zoom}}
+
+\begin{itemize}
+	\item Ulaz: 
+	\begin{itemize}
+		\item Funkcija $\phi(\alpha) = f(x_k + \alpha p_k)$
+		\item Vrednosti $\alpha_{lo}$ i $\alpha_{hi}$
+	\end{itemize}
+	\item Izlaz: 
+	\begin{itemize}
+		\item Finalni korak $\alpha^*$ iz intervala $[\alpha_{lo}, \alpha_{hi}]$
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Algoritam \texttt{Zoom}}
+
+\begin{lstlisting}
+repeat
+	Prona%\texttt{\dj}%i probni korak %$\alpha_j$% izme%\texttt{\dj}%u %$\alpha_{lo}$% i %$\alpha_{hi}$%;
+	Izra%\texttt{\v c}%unaj %$\phi(\alpha_j)$%;
+	if %$\phi(\alpha_j) > \phi(0) + c_1\alpha_j\phi'(\alpha_0)$% or %$\phi(\alpha_j) \geq \phi(\alpha_{lo})$%
+		Postavi %$\alpha_{hi} \gets \alpha_j$%;
+	else
+		Izra%\texttt{\v c}%unaj %$\phi'(\alpha_j)$%;
+		if %$|\phi'(\alpha_j)| \leq -c_2 \phi'(0)$%
+			Postavi %$\alpha^* \gets \alpha_j$%; Zaustavi;
+		if %$\phi'(\alpha_j)(\alpha_{hi} - \alpha_{lo}) \geq 0$%
+			Postavi %$\alpha_{hi} \gets \alpha_{lo}$%;
+		Postavi %$\alpha_{lo} \gets \alpha_{j}$%;
+end (repeat)
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Algoritam \texttt{BFGS}}
+
+\begin{itemize}
+	\item Ulaz: 
+	\begin{itemize}
+		\item Ciljna funkcija $f$ 
+		\item Gradijent funkcije $\nabla f$
+		\item Po\v cetna ta\v cka $x_0$
+		\item Parametar konvergencije $\epsilon$
+		\item Inverz aproksimacije Hesijana $B_0^{-1}$
+	\end{itemize}
+	\item Izlaz: 
+	\begin{itemize}
+		\item Aproksimacija minimuma $x^*$
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Algoritam \texttt{BFGS}}
+
+\begin{lstlisting}
+%$k \gets 0$%;
+while %$||\nabla f_k|| > \epsilon$%
+	Izra%\texttt{\v c}%unaj pravac pretrage %$p_k$% prema formuli %\ref{for:pravac pretrage}%;
+	Postavi %$\alpha_k \gets$% Linijska_pretraga(%$f$%, %$x_k$%, %$p_k$%);
+	Postavi %$x_{k+1} \gets x_k + \alpha_k p_k$%;
+	Postavi %$s_k \gets x_{k+1} - x_k$%;
+	Postavi %$y_k \gets \nabla f_{k+1} - \nabla f_k$%;
+	Izra%\texttt{\v c}%unaj %$B_{k+1}^{-1}$% prema formuli %\ref{for:BFGS formula}%;
+	%$k \gets k + 1$%;
+end (repeat)
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Ocena slo\v zenosti}
+
+\begin{itemize}
+	\item Svaka iteracija se izvodi po cenu od $O(n^2)$ \\
+	uz cenu izra\v cunavanja vrednosti funkcija i gradijenata
+	
+	\item S obzirom da nema re\v savanja \\
+	sistema linearnih jedna\v cina i matrica-matrica operacija, \\
+	ne postoje ni operacije slo\v zenosti $O(n^3)$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\vspace*{3em}
+
+{\Large Hvala na pa\v znji!} 
+
+\vspace*{1em}
+
+Pitanja?
+
+\end{frame}
+
+\end{document}
