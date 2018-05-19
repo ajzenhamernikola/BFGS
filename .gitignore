@@ -1,8 +1,8 @@
-Slides\*.aux
-Slides\*.log
-Slides\*.nav
-Slides\*.out
-Slides\*.snm
-Slides\*.synctex.gz
-Slides\*.toc
-Slides\*.vrb
+Slides/*.aux
+Slides/*.log
+Slides/*.nav
+Slides/*.out
+Slides/*.snm
+Slides/*.synctex.gz
+Slides/*.toc
+Slides/*.vrb
