@@ -276,6 +276,89 @@ end (repeat)
 
 \end{frame}
 
+\section{Primeri izvr\v savanja algoritma \texttt{BFGS}}
+
+\begin{frame}{Primeri izvr\v savanja algoritma \texttt{BFGS}}
+
+Svi primeri sadr\v ze neke zajedni\v cke parametre:
+\begin{itemize}
+	\item Parametar konvergencije: $\epsilon = 0.001$
+	\item Inverz aproksimacije Hesijana $B_0^{-1} = I$
+\end{itemize}
+
+Dodatno:
+\begin{itemize}
+	\item Broj koraka u algoritmu je ograni\v cen na $30$
+	\item Koordinate po\v cetnih ta\v caka su nasumi\v cno odabrane iz intervala $[-100, 100]$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Primeri izvr\v savanja algoritma \texttt{BFGS} -- Primer 1}
+
+Ulaz:
+\begin{itemize}
+	\item Funkcija $f = x^2 + (y-5)^2 + z^2 + \sin^2(x)$
+	\item Po\v cetna ta\v cka: $x_0 = (-11, -32, 54)$
+\end{itemize}
+
+Osobine funkcije:
+\begin{itemize}
+	\item Nema globalni minimum
+	\item Lokalni minimum: $x_{lmin} = (0, 5, 0)$
+\end{itemize}
+
+Izlaz:
+\begin{itemize}
+	\item Aproksimacija minimuma: $x^* = (0.000988938667, 5.00110140, 0.00110140016)$
+	\item Broj koraka: $5$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Primeri izvr\v savanja algoritma \texttt{BFGS} -- Primer 2}
+
+Ulaz:
+\begin{itemize}
+	\item Funkcija $g = -(5 + 3x - 4y - x^2 + xy - y^2)$
+	\item Po\v cetna ta\v cka: $x_0 = (-32, -52)$
+\end{itemize}
+
+Osobine funkcije:
+\begin{itemize}
+	\item Globalni minimum: $x_{gmin} = (\frac{2}{3}, -\frac{5}{3})$
+\end{itemize}
+
+Izlaz:
+\begin{itemize}
+	\item Aproksimacija minimuma: $x^* = (0.66659927, -1.66659927)$
+	\item Broj koraka: $19$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Primeri izvr\v savanja algoritma \texttt{BFGS} -- Primer 3}
+
+Ulaz:
+\begin{itemize}
+	\item Funkcija $h = (4 - x^2 - 2y^2)$
+	\item Po\v cetna ta\v cka: $x_0 = (-32, -52)$
+\end{itemize}
+
+Osobine funkcije:
+\begin{itemize}
+	\item Globalni minimum: Svaka ta\v cka $x_{gmin}$ \\ 
+	koja zadovoljava $x^2 + 2y^2 = 4$
+\end{itemize}
+
+Izlaz:
+\begin{itemize}
+	\item Aproksimacija minimuma: $x^* = (1.68325764, 0.76375505)$\footnote{Uvr\v stanjem vrednosti $x^*$ u izraz $x^2 + 2y^2$ dobija se vrednost $3.999999835419375$.}
+	\item Broj koraka: $11$
+\end{itemize}
+
+\end{frame}
+
 \begin{frame}
 
 \vspace*{3em}
