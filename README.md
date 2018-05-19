@@ -1,8 +1,8 @@
 # BFGS
 
-This repository contains my implementation of *Broyden–Fletcher–Goldfarb–Shanno* optimization algorithm. More information will be added soon.
+This repository contains my implementation of *Broyden–Fletcher–Goldfarb–Shanno* optimization algorithm.
 
-**Work in progress**
+More information about this project can be found in [Slides (Serbian only)](https://github.com/theikeofficial/BFGS/blob/master/Slides/serbian.pdf)
 
 # Bibliography
 
