@@ -7,3 +7,4 @@ Slides/*.synctex.gz
 Slides/*.toc
 Slides/*.vrb
 .ipynb_checkpoints/BFGS-checkpoint.ipynb
+.DS_Store
