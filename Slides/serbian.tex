@@ -266,12 +266,17 @@ end (repeat)
 \begin{frame}{Ocena slo\v zenosti}
 
 \begin{itemize}
-	\item Svaka iteracija se izvodi po cenu od $O(n^2)$ \\
-	uz cenu izra\v cunavanja vrednosti funkcija i gradijenata
-	
 	\item S obzirom da nema re\v savanja \\
 	sistema linearnih jedna\v cina i matrica-matrica operacija, \\
 	ne postoje ni operacije slo\v zenosti $O(n^3)$
+	
+	\item Formula \ref{for:BFGS formula} mo\v ze se prezapisati \\
+	tako da se izvr\v se samo mno\v zenja \\
+	$(n \times n) \cdot (n \times 1)$, $(n \times 1) \cdot (1 \times n)$ i $(1 \times n) \cdot (n \times n)$, \\
+	\v cije su slo\v zenosti $O(n^2)$
+	
+	\item Dakle, svaka iteracija se izvodi po cenu od $O(n^2)$ \\
+	uz cenu izra\v cunavanja vrednosti funkcija i gradijenata
 \end{itemize}
 
 \end{frame}
@@ -299,7 +304,7 @@ Dodatno:
 Ulaz:
 \begin{itemize}
 	\item Funkcija $f = x^2 + (y-5)^2 + z^2 + \sin^2(x)$
-	\item Po\v cetna ta\v cka: $x_0 = (-11, -32, 54)$
+	\item Po\v cetna ta\v cka: $x_0 = (-80, 2, 21)$
 \end{itemize}
 
 Osobine funkcije:
@@ -310,8 +315,8 @@ Osobine funkcije:
 
 Izlaz:
 \begin{itemize}
-	\item Aproksimacija minimuma: $x^* = (0.000988938667, 5.00110140, 0.00110140016)$
-	\item Broj koraka: $5$
+	\item Aproksimacija minimuma: $x^* = (2.26262201\cdot 10^{-9}, 5.00000000\cdot 10^{0}, 3.08331127\cdot 10^{-8})$
+	\item Broj koraka: $6$
 \end{itemize}
 
 \end{frame}
@@ -321,7 +326,7 @@ Izlaz:
 Ulaz:
 \begin{itemize}
 	\item Funkcija $g = -(5 + 3x - 4y - x^2 + xy - y^2)$
-	\item Po\v cetna ta\v cka: $x_0 = (-32, -52)$
+	\item Po\v cetna ta\v cka: $x_0 = (-26, -13)$
 \end{itemize}
 
 Osobine funkcije:
@@ -331,8 +336,8 @@ Osobine funkcije:
 
 Izlaz:
 \begin{itemize}
-	\item Aproksimacija minimuma: $x^* = (0.66659927, -1.66659927)$
-	\item Broj koraka: $19$
+	\item Aproksimacija minimuma: $x^* = (0.66666667, -1.66666667)$
+	\item Broj koraka: $5$
 \end{itemize}
 
 \end{frame}
@@ -342,7 +347,7 @@ Izlaz:
 Ulaz:
 \begin{itemize}
 	\item Funkcija $h = (4 - x^2 - 2y^2)$
-	\item Po\v cetna ta\v cka: $x_0 = (-32, -52)$
+	\item Po\v cetna ta\v cka: $x_0 = (16, -1)$
 \end{itemize}
 
 Osobine funkcije:
@@ -353,8 +358,8 @@ Osobine funkcije:
 
 Izlaz:
 \begin{itemize}
-	\item Aproksimacija minimuma: $x^* = (1.68325764, 0.76375505)$\footnote{Uvr\v stanjem vrednosti $x^*$ u izraz $x^2 + 2y^2$ dobija se vrednost $3.999999835419375$.}
-	\item Broj koraka: $11$
+	\item Aproksimacija minimuma: $x^* = (0.17758343, 1.40862772)$\footnote{Uvr\v stanjem vrednosti $x^*$ u izraz $x^2 + 2y^2$ dobija se vrednost $3.999999981715361$.}
+	\item Broj koraka: $7$
 \end{itemize}
 
 \end{frame}
