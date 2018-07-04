@@ -1,3 +1,6 @@
+%!TeX program = pdflatex
+%!BIB program = biber
+
 \documentclass[serbian]{beamer}
 
 \usepackage{babel}
@@ -9,6 +12,10 @@
   \setbeamertemplate{navigation symbols}{}
   \setbeamertemplate{caption}[numbered]
 } 
+
+\usepackage[style=numeric]{biblatex}
+\addbibresource{serbian.bib}
+\setbeamertemplate{bibliography item}[triangle]
 
 % This is for slide numbering
 \setbeamertemplate{sidebar right}{}
@@ -373,6 +380,26 @@ Izlaz:
 \vspace*{1em}
 
 Pitanja?
+
+\end{frame}
+
+\section{Dodatak}
+
+\begin{frame}{Dodatak}
+
+\begin{flushleft}
+	{\Large Literatura}
+\end{flushleft}
+
+\nocite{NumOpt}
+
+\printbibliography
+
+\begin{flushleft}
+	{\Large Repozitorijum}
+\end{flushleft}
+
+\href{https://github.com/theikeofficial/BFGS}{https://github.com/theikeofficial/BFGS}
 
 \end{frame}
 

@@ -1,7 +1,11 @@
 Slides/*.aux
+Slides/*.bbl
+Slides/*.bcf
+Slides/*.blg
 Slides/*.log
 Slides/*.nav
 Slides/*.out
+Slides/*.run.xml
 Slides/*.snm
 Slides/*.synctex.gz
 Slides/*.toc
